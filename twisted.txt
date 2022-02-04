@@ -1,0 +1,17 @@
+from twisted.internet import reactor
+from twisted.web.proxy import ReverseProxyResource
+from twisted.web.resource import Resource
+from twisted.web.server import Site
+from twisted.web.wsgi import WSGIResource
+
+from TestServer import app
+
+
+flask_site = WSGIResource(reactor, reactor.getThreadPool(), app)
+
+root = Resource()
+root.putChild(b'twisted', flask_site)
+
+
+reactor.listenTCP(5002, Site(root))
+reactor.run()

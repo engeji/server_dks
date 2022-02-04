@@ -1,0 +1,13 @@
+* {
+    /* background: #444;
+    border: 1px solid #000; */
+    background-color: rgb(25, 25, 25);
+    /* margin-bottom:-1px;
+    padding-bottom:1px; */
+}
+
+
+body, h1, h2, p, table, .log  {
+    background-color: rgb(25, 25, 25);
+    color: rgba(187, 187, 187, 0.808);
+}
