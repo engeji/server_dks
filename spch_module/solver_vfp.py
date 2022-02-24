@@ -26,7 +26,7 @@ class Solver_vfp(Solver):
         self.vec_ob_func = np.vectorize(lambda x1, y1: self.ob_func([x1,y1]))
         self.vec_p_out_req_func = np.vectorize(lambda x1, y1: self.get_summ([x1,y1])[0].p_in)
     def get_summ(self, x)-> CompSummary:
-        return self.comp.calc_comp_summary_out(self.mode, x, self.border_list)
+        return self.comp.calc_comp_summary_out(self.mode, x, self.border_list, is_in_border=False)
     def ob_func_by_components(self,x):
         comp_summ = self.get_summ(x)
         borders_sum = self.get_border_val(x, comp_summ)

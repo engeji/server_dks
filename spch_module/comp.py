@@ -68,13 +68,16 @@ class Comp(BaseCollection[Stage]):
             _p_in = _p_in * _res[-1].comp_degree - stage.lim.dp_avo
             _t_in = stage.lim.t_avo
         return CompSummary(_res, mode, border_list)
-    def calc_comp_summary_out(self, mode:Mode, freqs:Iterable[float], border_list:Iterable[Border]=DEFAULT_BORDER)->CompSummary:
+    def calc_comp_summary_out(self, mode:Mode, freqs:Iterable[float], border_list:Iterable[Border]=DEFAULT_BORDER, is_in_border:bool=False)->CompSummary:
         cur_mode = mode.clone()
         res = []
         for st, freq in list(zip(self, freqs))[-1::-1]:
             stage:Stage = st
             cur_mode.t_in = stage.lim.t_avo if stage.idx >= 1 else mode.t_in
-            res.append(stage.calc_stage_summary_out(cur_mode, freq))
+            summ = stage.calc_stage_summary_out(cur_mode, freq, is_in_border=is_in_border)
+            res.append(summ)
+            if summ is None:
+                break
             cur_mode.p_input = res[-1].p_in + stage.lim.dp_avo
         res.reverse()
         return CompSummary(res, mode, border_list)

@@ -30,6 +30,8 @@ class Spch(SpchInit):
         # koef_raskh = 4 * ob_raskh(q_in, p_in, t_in, r_val, plot_std=plot_std) / 60. / (
         #     math.pi * (self.d_val ** 2) * self.vel(freq))
         return koef_raskh / 4. * (math.pi * (self.d_val **2) * u_val)
+    def get_freq_by_vel(self, vel:float)->float:
+        return vel / math.pi / self.d_val
     def calc_y(self, volume_rate:float, k_raskh:float, z_in:float, r_val:float, t_in:float, k_val:float)->float:
         percent_x = self.percent_x_by_k_raskh(k_raskh)
         freq = self.freq_by_percent(volume_rate, percent_x)
@@ -82,5 +84,15 @@ class Spch(SpchInit):
             4 * volume_rate / ((math.pi ** 2) * (self.d_val ** 3) * psi)
         for psi in (self.max_k_raskh, self.min_k_raskh)]
     @property
-    def z_in(self):
-        return  my_z(self.ptitle / 10. /  self.stepen, self.t_val)
+    def p_in(self):
+        return  self.ptitle / 10. /  self.stepen
+    def get_volume_rate_by_freq_and_perc(self, freq:float, percent_x:float)->float:
+        k_raskh = self.koef_raskh_by_percent_x(percent_x)
+        return k_raskh * math.pi * (self.d_val ** 2) * self.vel(freq) / 4.
+    def get_N1_p_in(self, freq:float, koef_raskh:float, z_in:float, r_val:float, t_in:float)->float:
+        u_val = self.vel(freq) / 60
+        koef_nap = self.calc_k_nap(koef_raskh)
+        kpd = self.calc_k_kpd(koef_raskh)
+        return (u_val ** 3) * koef_nap * koef_raskh * math.pi * (self.d_val**2) / (
+            4 * z_in * r_val * t_in * kpd
+        ) * 10 ** 3

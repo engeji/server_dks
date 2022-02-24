@@ -88,7 +88,8 @@ def plot(p, t, R, t_krit=190, p_krit=4.6):
         float: плотность газа при указанные давлении и температуры, дж/кг
     """
     return p * (10 ** 6) / my_z(p,t, t_krit, p_krit) / R / t
-
+def p_z(plot, R, t_in):
+    return plot * R * t_in / (10**6)
 def ob_raskh(Q, p_in, t_in, R, plot_std=0.692):
     """Обьемный расход, м3/мин
 
@@ -119,3 +120,4 @@ def q_in(volume_rate:float, p_in:float, t_in:float, R:float, plot_std:float=.692
     """    
     q_mln = volume_rate/ ((10 ** 6) / 24.0 / 60.0)
     return q_mln / plot_std * plot(p_in, t_in, R)
+
